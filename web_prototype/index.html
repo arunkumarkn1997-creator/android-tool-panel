@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Tool-Panel Prototype</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- ROOT SCREEN: 360x800 Fixed -->
+    <div class="Root_Surface">
+
+        <!-- STICKY HEADER ZONE (WARP) -->
+        <div class="Sticky_Header_Warp">
+
+            <!-- LEFT: Selection & Dropdown -->
+            <div class="Header_Left_Group">
+
+                <!-- Clickable Trigger -->
+                <div class="Header_Color_Trigger" onclick="toggleDropdown()">
+                    <div class="Header_Color_Preview" id="headerPreview">
+                        <!-- Arrow -->
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Selected Name -->
+                <div class="Header_Selected_Name" id="headerSelectedName">Green</div>
+
+                <!-- Dropdown Menu (Absolute) -->
+                <div class="Dropdown_Menu" id="dropdownMenu">
+                    <!-- Search Bar -->
+                    <input type="text" id="dropdownSearch" placeholder="Search..." class="Dropdown_Search"
+                        onclick="event.stopPropagation()">
+                    <!-- Items injected by JS -->
+                    <div id="dropdownItemsContainer"></div>
+                </div>
+
+            </div>
+
+            <!-- CENTER: Title -->
+            <div class="Section_Header_Label" id="warpTitle">Warp colour</div>
+
+            <!-- RIGHT: Language Toggle -->
+            <div class="Header_Right_Group">
+                <div class="Language_Toggle_Btn" id="langToggleBtn" onclick="toggleLanguage()">TA</div>
+            </div>
+        </div>
+
+        <!-- SECONDARY HEADER (FIXED) -->
+        <div class="Secondary_Header_Weft">
+            <div class="Secondary_Label">Suitable Weft colours</div>
+        </div>
+
+        <!-- SCROLLABLE CONTENT ZONE -->
+        <div class="Constrained_Scroll_Container">
+            <!-- CENTERED CONTROL COLUMN -->
+            <div class="Vertical_Control_Column">
+
+                <!-- LIST OF ROWS -->
+                <div class="Warp_Color_Swatcher_List" id="swatchList">
+                    <!-- Rows injected by JS:
+                         [Swatch] [Color Name] [ + ] [Count Box] [ - ]
+                    -->
+                </div>
+
+            </div>
+        </div>
+
+        <!-- FOOTER (FIXED) -->
+        <div class="Sticky_Footer_Total">
+            <div class="Footer_Label">Total selected :</div>
+            <div class="Footer_Count_Box" id="totalCountBox">0</div>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
