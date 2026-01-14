@@ -81,9 +81,9 @@ val BrandGreen = Color(0xFF2CCA56)
 
 // --- Translation Helper ---
 val Translations = mapOf(
-    "Warp colour" to "வார் வண்ணங்கள்", // APPROX for Warp
-    "Suitable Weft colours" to "பொருத்தமான ஊடு வண்ணங்கள்",
-    "Total selected" to "மொத்தம்", // Shortened
+    "Warp colour" to "வார் நிறங்கள்",
+    "Suitable Weft colours" to "பொருத்தமான ஊடு நிறங்கள்",
+    "Total selected" to "மொத்தம்",
     "Search..." to "தேடு...",
     "No colors found" to "வண்ணங்கள் இல்லை",
     "Green" to "பச்சை",
@@ -101,7 +101,6 @@ val Translations = mapOf(
     "Cyan" to "சாயல்",
     "Ivory" to "தந்தம்",
     "Lemon" to "எலுமிச்சை",
-    "Grey" to "சாம்பல்",
     "Lavendar" to "லாவெண்டர்",
     "Baba" to "பாபா",
     "L Anandha" to "இள ஆனந்தா",
@@ -178,12 +177,12 @@ fun Sticky_Header_Warp(
                     
                     Spacer(modifier = Modifier.width(12.dp))
                     
-                    val displayName = remember(selectedName, isTamil) { selectedName.translate(isTamil) }
                     Text(
                         text = displayName,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = PremiumTextPrimary,
+                        modifier = Modifier.weight(1f, fill = false) // Allow it to wrap if needed but don't force width
                     )
                     
                     Icon(
@@ -241,7 +240,7 @@ fun Sticky_Header_Warp(
             }
             
             Box(
-                modifier = Modifier.weight(1f).padding(horizontal = 12.dp),
+                modifier = Modifier.padding(horizontal = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -249,7 +248,9 @@ fun Sticky_Header_Warp(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = PremiumTextPrimary,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
             

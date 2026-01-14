@@ -104,7 +104,7 @@ fun ToolPanelScreen() {
             }
             
             // 4. FOOTER (zIndex 1 to stay on top of scroll)
-            val totalCount by remember {
+            val totalCount by remember(selectedCounts) {
                 derivedStateOf { selectedCounts.values.sum() }
             }
             
