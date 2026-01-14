@@ -12,72 +12,76 @@ import androidx.compose.ui.unit.dp
 import com.example.toolpanel.ui.components.*
 import com.example.toolpanel.ui.theme.ToolPanelTheme
 
-val WeftColorsList = listOf(
-    WeftColor("Green", Color(0xFF2CCA56)),
-    WeftColor("Light green", Color(0xFFD1E231)),
-    WeftColor("Green", Color(0xFF228B22)),
-    WeftColor("Green", Color(0xFF32CD32)),
-    WeftColor("Yellow", Color(0xFFFFF000)),
-    WeftColor("Blue", Color(0xFF0096FF)),
-    WeftColor("Blue", Color(0xFF0047AB))
-)
-
-// 6 Warp Colors as requested
-val WarpColorsList = listOf(
-    WeftColor("Red", Color(0xFFFF0000)),
-    WeftColor("Green", Color(0xFF2CCA56)),
-    WeftColor("Blue", Color(0xFF0096FF)),
-    WeftColor("Yellow", Color(0xFFFFF000)),
-    WeftColor("Orange", Color(0xFFFF7F00)),
-    WeftColor("Purple", Color(0xFF800080))
-)
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun ToolPanelScreen() {
+    val context = LocalContext.current
+    val colorConfig = remember { loadColorsFromAssets(context) }
+    val focusManager = LocalFocusManager.current
+    
     // State for Language
     var isTamil by remember { mutableStateOf(false) }
 
-    // State for Warp Header
-    var selectedWarpColor by remember { mutableStateOf(WarpColorsList[1].color) } // Default Green
-    var selectedWarpName by remember { mutableStateOf(WarpColorsList[1].name) }
+    // State for selected Warp Data
+    var selectedWarpData by remember(colorConfig) { 
+        mutableStateOf(colorConfig.warpColors.firstOrNull()) 
+    }
     
-    // State for multi-selection quantities
-    val selectedCounts = remember { mutableStateMapOf<Int, Int>() }
+    val warpDropdownOptions = remember(colorConfig) {
+        colorConfig.warpColors.map { WeftColor(it.name, it.hex.toColor()) }
+    }
 
-    // Root Container - Premium Background
+    val currentWeftList = remember(selectedWarpData) {
+        selectedWarpData?.wefts?.map { WeftColor(it.name, it.hex.toColor()) } ?: emptyList()
+    }
+    
+    val selectedCounts = remember(selectedWarpData) { mutableStateMapOf<Int, Int>() }
+
+    // Root Container
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F7FA)) // Premium Bg
+            .background(PremiumBg)
+            .clickable(
+                onClick = { focusManager.clearFocus() },
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) 
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             
-            // 1. STICKY HEADER
-            Sticky_Header_Warp(
-                selectedColor = selectedWarpColor,
-                selectedName = selectedWarpName,
-                warpColors = WarpColorsList,
-                isTamil = isTamil,
-                onLanguageToggle = { isTamil = !isTamil },
-                onColorSelected = { color, name ->
-                    selectedWarpColor = color
-                    selectedWarpName = name
-                }
-            )
+            // 1. STICKY HEADER GROUP (zIndex 1 to stay on top)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .zIndex(1f)
+                    .background(PremiumSurface)
+            ) {
+                Sticky_Header_Warp(
+                    selectedColor = selectedWarpData?.hex?.toColor() ?: Color.Gray,
+                    selectedName = selectedWarpData?.name ?: "Select",
+                    warpColors = warpDropdownOptions,
+                    isTamil = isTamil,
+                    onLanguageToggle = { isTamil = !isTamil },
+                    onColorSelected = { _, name ->
+                        selectedWarpData = colorConfig.warpColors.find { it.name == name }
+                    }
+                )
+                
+                Secondary_Header_Weft(isTamil = isTamil)
+            }
             
-            // 2. SECONDARY HEADER
-            Secondary_Header_Weft(isTamil = isTamil)
-            
-            // 3. SCROLLABLE LIST (Weight 1f to fill space)
+            // 3. SCROLLABLE LIST
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                contentPadding = PaddingValues(vertical = 16.dp)
+                contentPadding = PaddingValues(top = 8.dp, bottom = 12.dp)
             ) {
                 itemsIndexed(
-                    items = WeftColorsList,
-                    key = { index, item -> "${item.name}_$index" } // Use stable keys for better performance
+                    items = currentWeftList,
+                    key = { index, item -> "${item.name}_$index" }
                 ) { index, item ->
                     Weft_Color_Row(
                         color = item.color,
@@ -95,15 +99,22 @@ fun ToolPanelScreen() {
                 }
             }
             
-            // 4. FOOTER
+            // 4. FOOTER (zIndex 1 to stay on top of scroll)
             val totalCount by remember {
                 derivedStateOf { selectedCounts.values.sum() }
             }
             
-            Sticky_Footer_Total(
-                count = totalCount,
-                isTamil = isTamil
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(PremiumBg)
+                    .zIndex(1f)
+            ) {
+                Sticky_Footer_Total(
+                    count = totalCount,
+                    isTamil = isTamil
+                )
+            }
         }
     }
 }

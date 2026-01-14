@@ -1,0 +1,89 @@
+{
+  "warpColors": [
+    {
+      "name": "Rani",
+      "hex": "#E91E63",
+      "wefts": [
+        { "name": "Black", "hex": "#000000" },
+        { "name": "Maroon", "hex": "#800000" },
+        { "name": "Red", "hex": "#FF0000" },
+        { "name": "Majenta", "hex": "#FF00FF" },
+        { "name": "pink", "hex": "#FFC0CB" },
+        { "name": "Rani", "hex": "#E91E63" }
+      ]
+    },
+    {
+      "name": "Tussar",
+      "hex": "#D2B48C",
+      "wefts": [
+        { "name": "White", "hex": "#FFFFFF" },
+        { "name": "Gold", "hex": "#FFD700" },
+        { "name": "Pink", "hex": "#FFC0CB" },
+        { "name": "Parrot green", "hex": "#32CD32" }
+      ]
+    },
+    {
+      "name": "White",
+      "hex": "#FFFFFF",
+      "wefts": [
+        { "name": "White", "hex": "#FFFFFF" },
+        { "name": "Ivory", "hex": "#FFFFF0" },
+        { "name": "Pink", "hex": "#FFC0CB" },
+        { "name": "Lemon", "hex": "#FFF700" },
+        { "name": "Grey", "hex": "#808080" },
+        { "name": "Lavendar", "hex": "#E6E6FA" },
+        { "name": "Parrot green", "hex": "#32CD32" },
+        { "name": "Baba", "hex": "#F5F5DC" },
+        { "name": "L Anandha", "hex": "#ADD8E6" }
+      ]
+    },
+    {
+      "name": "Green",
+      "hex": "#2CCA56",
+      "wefts": [
+        { "name": "Black", "hex": "#000000" },
+        { "name": "Green", "hex": "#2CCA56" },
+        { "name": "Red", "hex": "#FF0000" }
+      ]
+    },
+    {
+      "name": "Red",
+      "hex": "#FF0000",
+      "wefts": [
+        { "name": "Black", "hex": "#000000" },
+        { "name": "Red", "hex": "#FF0000" }
+      ]
+    },
+    {
+      "name": "Black",
+      "hex": "#000000",
+      "wefts": [
+        { "name": "Voilet", "hex": "#8F00FF" },
+        { "name": "Red", "hex": "#FF0000" },
+        { "name": "Maroon", "hex": "#800000" },
+        { "name": "Green", "hex": "#2CCA56" },
+        { "name": "Coffee", "hex": "#6F4E37" },
+        { "name": "Black", "hex": "#000000" },
+        { "name": "Tussar", "hex": "#D2B48C" },
+        { "name": "Rani", "hex": "#E91E63" },
+        { "name": "Peacock", "hex": "#008080" },
+        { "name": "Sumathi", "hex": "#006666" },
+        { "name": "Dark Grey", "hex": "#A9A9A9" },
+        { "name": "Majenta", "hex": "#FF00FF" },
+        { "name": "Lavendar", "hex": "#E6E6FA" },
+        { "name": "D Anandha", "hex": "#00008B" }
+      ]
+    },
+    {
+      "name": "Gold",
+      "hex": "#FFD700",
+      "wefts": [
+        { "name": "Gold", "hex": "#FFD700" },
+        { "name": "Tussar", "hex": "#D2B48C" },
+        { "name": "Baba", "hex": "#F5F5DC" },
+        { "name": "Red", "hex": "#FF0000" },
+        { "name": "Orange", "hex": "#FFA500" }
+      ]
+    }
+  ]
+}

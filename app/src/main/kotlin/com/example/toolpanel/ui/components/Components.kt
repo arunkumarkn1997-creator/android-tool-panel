@@ -8,28 +8,52 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.zIndex
+import androidx.compose.foundation.text.KeyboardActions
+
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import android.content.Context
 
 // --- Data Models ---
+@Serializable
+data class ColorData(val name: String, val hex: String)
+
+@Serializable
+data class WarpColorData(
+    val name: String,
+    val hex: String,
+    val wefts: List<ColorData>
+)
+
+@Serializable
+data class ColorConfig(
+    val warpColors: List<WarpColorData>
+)
+
 @Immutable
 data class WeftColor(val name: String, val color: Color)
+
+// --- Helper for Hex to Color ---
+fun String.toColor(): Color {
+    return try {
+        Color(android.graphics.Color.parseColor(this))
+    } catch (e: Exception) {
+        Color.Gray
+    }
+}
+
+// --- JSON Loader ---
+fun loadColorsFromAssets(context: Context): ColorConfig {
+    return try {
+        val jsonString = context.assets.open("colors.json").bufferedReader().use { it.readText() }
+        Json.decodeFromString<ColorConfig>(jsonString)
+    } catch (e: Exception) {
+        ColorConfig(emptyList())
+    }
+}
 
 // --- Premium Design Constants ---
 val PremiumBg = Color(0xFFF5F7FA)
@@ -57,7 +81,25 @@ val Translations = mapOf(
     "Black" to "கருப்பு",
     "White" to "வெள்ளை",
     "Grey" to "சாம்பல்",
-    "Cyan" to "சாயல்"
+    "Cyan" to "சாயல்",
+    "Ivory" to "தந்தம்",
+    "Lemon" to "எலுமிச்சை",
+    "Grey" to "சாம்பல்",
+    "Lavendar" to "லாவெண்டர்",
+    "Baba" to "பாபா",
+    "L Anandha" to "இள ஆனந்தா",
+    "D Anandha" to "கரும் ஆனந்தா",
+    "Voilet" to "ஊதா",
+    "Coffee" to "காபி",
+    "Peacock" to "மயில்",
+    "Sumathi" to "சுமதி",
+    "Dark Grey" to "கருஞ்சாம்பல்",
+    "Maroon" to "மெரூன்",
+    "Majenta" to "மெஜந்தா",
+    "Tussar" to "தசர்",
+    "Rani" to "ராணி சிகப்பு",
+    "Parrot green" to "கிளி பச்சை",
+    "Gold" to "தங்கம்"
 )
 
 fun String.translate(isTamil: Boolean): String {
@@ -125,7 +167,6 @@ fun Sticky_Header_Warp(
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = PremiumTextPrimary,
-                        maxLines = 1,
                     )
                     
                     Icon(
@@ -182,18 +223,16 @@ fun Sticky_Header_Warp(
                 }
             }
             
-            // Center: Title
-            // Flexible weight allows it to center in the remaining space
-            // If Left Group grows, this box shrinks/shifts right naturally
             Box(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).padding(horizontal = 12.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "Warp colour".translate(isTamil),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = PremiumTextPrimary
+                    color = PremiumTextPrimary,
+                    textAlign = TextAlign.Center
                 )
             }
             
@@ -224,17 +263,23 @@ fun Secondary_Header_Weft(
     isTamil: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(24.dp, 16.dp, 24.dp, 12.dp) // Reduced top padding
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        color = PremiumBg, // Use background color to cover scrolling items
+        shadowElevation = 0.dp
     ) {
-        Text(
-            text = "Suitable Weft colours".translate(isTamil),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = PremiumTextPrimary
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp, 16.dp, 24.dp, 12.dp)
+        ) {
+            Text(
+                text = "Suitable Weft colours".translate(isTamil),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = PremiumTextPrimary
+            )
+        }
     }
 }
 
@@ -279,8 +324,6 @@ fun Weft_Color_Row(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = PremiumTextPrimary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
                 )
             }
             
@@ -308,6 +351,7 @@ fun Weft_Color_Row(
                     }
                     
                     // Count (Editable)
+                    val focusManager = LocalFocusManager.current
                     BasicTextField(
                         value = count.toString(),
                         onValueChange = { newVal ->
@@ -320,7 +364,13 @@ fun Weft_Color_Row(
                             color = PremiumTextPrimary,
                             textAlign = TextAlign.Center
                         ),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = { focusManager.clearFocus() }
+                        ),
                         modifier = Modifier
                             .width(32.dp)
                             .wrapContentHeight(Alignment.CenterVertically)
@@ -369,8 +419,6 @@ fun Sticky_Footer_Total(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.White,
-                    maxLines = 1, 
-                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f) // Flexible Text
                 )
                 
