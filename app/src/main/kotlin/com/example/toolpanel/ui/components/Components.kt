@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -473,7 +474,7 @@ fun Sticky_Footer_Total(
                     modifier = Modifier.size(32.dp)
                 ) {
                     Icon(
-                        imageVector = androidx.compose.material.icons.Icons.Default.Share,
+                        imageVector = Icons.Default.Share,
                         contentDescription = "Share",
                         tint = Color.White,
                         modifier = Modifier.size(20.dp)
