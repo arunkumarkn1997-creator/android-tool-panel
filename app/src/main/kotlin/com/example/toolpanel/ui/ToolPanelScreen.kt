@@ -85,7 +85,7 @@ fun ToolPanelScreen() {
             ) {
                 itemsIndexed(
                     items = currentWeftList,
-                    key = { index, item -> "${item.name}_$index" }
+                    key = { index, item -> "${selectedWarpData?.name}_${item.name}_$index" }
                 ) { index, item ->
                     Weft_Color_Row(
                         color = item.color,
