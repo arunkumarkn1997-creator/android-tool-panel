@@ -75,7 +75,10 @@ fun ToolPanelScreen() {
                     .fillMaxWidth(),
                 contentPadding = PaddingValues(vertical = 16.dp)
             ) {
-                itemsIndexed(WeftColorsList) { index, item ->
+                itemsIndexed(
+                    items = WeftColorsList,
+                    key = { index, item -> "${item.name}_$index" } // Use stable keys for better performance
+                ) { index, item ->
                     Weft_Color_Row(
                         color = item.color,
                         name = item.name,
@@ -93,8 +96,12 @@ fun ToolPanelScreen() {
             }
             
             // 4. FOOTER
+            val totalCount by remember {
+                derivedStateOf { selectedCounts.values.sum() }
+            }
+            
             Sticky_Footer_Total(
-                count = selectedCounts.values.sum(),
+                count = totalCount,
                 isTamil = isTamil
             )
         }

@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 
 // --- Data Models ---
+@Immutable
 data class WeftColor(val name: String, val color: Color)
 
 // --- Premium Design Constants ---
@@ -118,13 +119,13 @@ fun Sticky_Header_Warp(
                     
                     Spacer(modifier = Modifier.width(12.dp))
                     
+                    val displayName = remember(selectedName, isTamil) { selectedName.translate(isTamil) }
                     Text(
-                        text = selectedName.translate(isTamil),
+                        text = displayName,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = PremiumTextPrimary,
                         maxLines = 1,
-                        // No Ellipsis here per user request ("Not like ...")
                     )
                     
                     Icon(
@@ -272,8 +273,9 @@ fun Weft_Color_Row(
                         .background(color)
                         .border(1.dp, Color.Black.copy(alpha = 0.05f), CircleShape)
                 )
+                val translatedName = remember(name, isTamil) { name.translate(isTamil) }
                 Text(
-                    text = name.translate(isTamil),
+                    text = translatedName,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = PremiumTextPrimary,
