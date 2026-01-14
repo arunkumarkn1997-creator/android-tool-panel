@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.toolpanel.ui.components.*
 import com.example.toolpanel.ui.theme.ToolPanelTheme
-
+import android.content.Intent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.zIndex
@@ -116,7 +116,32 @@ fun ToolPanelScreen() {
             ) {
                 Sticky_Footer_Total(
                     count = totalCount,
-                    isTamil = isTamil
+                    isTamil = isTamil,
+                    onShareClick = {
+                        val shareText = buildString {
+                            appendLine("🌟 Weaver App 🌟")
+                            appendLine("--------------------")
+                            appendLine("Warp: ${selectedWarpData?.name ?: "N/A"}")
+                            appendLine()
+                            appendLine("Selected Colors:")
+                            selectedCounts.forEach { (index, count) ->
+                                val color = currentWeftList.getOrNull(index)
+                                if (color != null) {
+                                    appendLine("- ${color.name}: $count")
+                                }
+                            }
+                            appendLine()
+                            appendLine("Total Selection: $totalCount")
+                        }
+
+                        val sendIntent: Intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, shareText)
+                            type = "text/plain"
+                        }
+                        val shareIntent = Intent.createChooser(sendIntent, null)
+                        context.startActivity(shareIntent)
+                    }
                 )
             }
         }

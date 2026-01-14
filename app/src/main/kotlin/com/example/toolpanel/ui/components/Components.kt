@@ -139,20 +139,29 @@ fun Sticky_Header_Warp(
 
     // Elevated App Bar style
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(88.dp),
-        color = PremiumSurface.copy(alpha = 0.98f), 
-        shadowElevation = 8.dp, 
-        border = BorderStroke(1.dp, Color(0xFFE2E8F0).copy(alpha = 0.5f))
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(96.dp), // Increased height for App Name
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // App Name at the very top
+            Text(
+                text = "Weaver App",
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                color = BrandGreen,
+                modifier = Modifier.padding(top = 8.dp),
+                letterSpacing = 1.sp
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
             // Left Side: Selection Pill. 
             // Natural flexible width (Removed widthIn constraints)
             Surface(
@@ -246,7 +255,7 @@ fun Sticky_Header_Warp(
             ) {
                 Text(
                     text = "Warp colour".translate(isTamil),
-                    fontSize = 16.sp,
+                    fontSize = 14.sp, // Slightly smaller to fit
                     fontWeight = FontWeight.SemiBold,
                     color = PremiumTextPrimary,
                     textAlign = TextAlign.Center,
@@ -415,6 +424,7 @@ fun Weft_Color_Row(
 fun Sticky_Footer_Total(
     count: Int,
     isTamil: Boolean,
+    onShareClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -452,6 +462,21 @@ fun Sticky_Footer_Total(
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                // Share Button inside Footer
+                IconButton(
+                    onClick = onShareClick,
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Icon(
+                        imageVector = androidx.compose.material.icons.Icons.Default.Share,
+                        contentDescription = "Share",
+                        tint = Color.White,
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             }
