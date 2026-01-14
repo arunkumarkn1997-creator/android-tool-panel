@@ -140,10 +140,15 @@ fun Sticky_Header_Warp(
 
     // Elevated App Bar style
     Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(96.dp), // Increased height for App Name
+        color = PremiumSurface.copy(alpha = 0.98f),
+        shadowElevation = 8.dp,
+        border = BorderStroke(1.dp, Color(0xFFE2E8F0).copy(alpha = 0.5f))
+    ) {
         Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(96.dp), // Increased height for App Name
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // App Name at the very top
@@ -163,10 +168,10 @@ fun Sticky_Header_Warp(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-            // Left Side: Selection Pill. 
+            // Left Side: Selection Pill.
             // Natural flexible width (Removed widthIn constraints)
             Surface(
-                shape = RoundedCornerShape(50), 
+                shape = RoundedCornerShape(50),
                 color = PremiumBg,
                 border = BorderStroke(1.dp, Color(0xFFE2E8F0)),
                 modifier = Modifier
@@ -184,9 +189,9 @@ fun Sticky_Header_Warp(
                             .background(selectedColor)
                             .border(1.dp, Color.Black.copy(alpha = 0.1f), CircleShape)
                     )
-                    
+
                     Spacer(modifier = Modifier.width(12.dp))
-                    
+
                     val displayName = remember(selectedName, isTamil) { selectedName.translate(isTamil) }
                     Text(
                         text = displayName,
@@ -195,7 +200,7 @@ fun Sticky_Header_Warp(
                         color = PremiumTextPrimary,
                         modifier = Modifier.weight(1f, fill = false)
                     )
-                    
+
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = "Select",
@@ -205,9 +210,9 @@ fun Sticky_Header_Warp(
 
                     DropdownMenu(
                         expanded = expanded,
-                        onDismissRequest = { 
-                            expanded = false 
-                            searchQuery = "" 
+                        onDismissRequest = {
+                            expanded = false
+                            searchQuery = ""
                         },
                         modifier = Modifier
                             .background(PremiumSurface)
@@ -222,8 +227,8 @@ fun Sticky_Header_Warp(
                             singleLine = true,
                             shape = RoundedCornerShape(8.dp)
                         )
-                        val filteredColors = warpColors.filter { 
-                            it.name.translate(isTamil).contains(searchQuery, ignoreCase = true) 
+                        val filteredColors = warpColors.filter {
+                            it.name.translate(isTamil).contains(searchQuery, ignoreCase = true)
                         }
                         if (filteredColors.isEmpty()) {
                              DropdownMenuItem(
@@ -233,13 +238,13 @@ fun Sticky_Header_Warp(
                         }
                         filteredColors.forEach { item ->
                             DropdownMenuItem(
-                                text = { 
-                                    Text(item.name.translate(isTamil), fontWeight = FontWeight.Medium) 
+                                text = {
+                                    Text(item.name.translate(isTamil), fontWeight = FontWeight.Medium)
                                 },
                                 onClick = {
                                     onColorSelected(item.color, item.name)
                                     expanded = false
-                                    searchQuery = "" 
+                                    searchQuery = ""
                                 },
                                 leadingIcon = {
                                     Box(modifier = Modifier.size(24.dp).clip(CircleShape).background(item.color))
@@ -249,7 +254,7 @@ fun Sticky_Header_Warp(
                     }
                 }
             }
-            
+
             Box(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 contentAlignment = Alignment.Center
@@ -264,7 +269,7 @@ fun Sticky_Header_Warp(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            
+
             // Right: Toggle
             Box(
                 modifier = Modifier
