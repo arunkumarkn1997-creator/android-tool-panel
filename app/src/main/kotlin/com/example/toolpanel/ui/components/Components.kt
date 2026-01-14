@@ -177,12 +177,13 @@ fun Sticky_Header_Warp(
                     
                     Spacer(modifier = Modifier.width(12.dp))
                     
+                    val displayName = remember(selectedName, isTamil) { selectedName.translate(isTamil) }
                     Text(
                         text = displayName,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = PremiumTextPrimary,
-                        modifier = Modifier.weight(1f, fill = false) // Allow it to wrap if needed but don't force width
+                        modifier = Modifier.weight(1f, fill = false)
                     )
                     
                     Icon(
