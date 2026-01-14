@@ -13,6 +13,10 @@ import com.example.toolpanel.ui.components.*
 import com.example.toolpanel.ui.theme.ToolPanelTheme
 
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.zIndex
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 
 @Composable
 fun ToolPanelScreen() {
